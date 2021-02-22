@@ -6,6 +6,9 @@ const BoardContainer = () => {
   const enableSettings = useSelector(
     (rootState: any) => rootState.control.enableSettings
   );
+  const gameState = useSelector(
+    (rootState: any) => rootState.control.gameState
+  );
   const width = useSelector((rootState: any) => rootState.control.width);
   const height = useSelector((rootState: any) => rootState.control.height);
 
@@ -19,6 +22,7 @@ const BoardContainer = () => {
         <Board
           width={width}
           height={height}
+          gameState={gameState}
           onRightClickBoard={onRightClickBoard}
         />
       )}

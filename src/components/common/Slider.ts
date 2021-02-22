@@ -1,17 +1,18 @@
 import styled, { css } from "styled-components";
 
 const thumbCSS = css`
-  background-color: dimgray;
+  background-color: #fff;
   border: none;
   border-radius: 0;
   width: 20px;
   height: 20px;
+  box-shadow: 2px 0 6px #0000001c;
 `;
 
 const Slider = styled.input.attrs({
   type: "range",
 })`
-  background-color: skyblue;
+  background-color: #87ebd9;
   outline: none;
   width: 100%;
   height: 20px;

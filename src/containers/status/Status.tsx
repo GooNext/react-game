@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +7,9 @@ import {
   showSettings,
   restartGame,
   updateElapsedTime,
+  autoplaySettings,
+  openCell,
+  gameMode,
 } from "../../store/modules/control";
 import { Status } from "../../components";
 
@@ -26,6 +30,9 @@ const StatusContainer = () => {
   const mineCount = useSelector(
     (rootState: any) => rootState.control.mineCount
   );
+  const width = useSelector((rootState: any) => rootState.control.width);
+  const height = useSelector((rootState: any) => rootState.control.height);
+  const autoplay = useSelector((rootState: any) => rootState.control.autoplay);
   const flagCount = useSelector(
     (rootState: any) => rootState.control.flagCount
   );
@@ -43,6 +50,29 @@ const StatusContainer = () => {
       clearInterval(gameTimer);
     };
   }, [enableTimer, dispatch]);
+
+  useEffect(() => {
+    let isAutoplay: any;
+    let x = 0;
+    let y = 0;
+    if (autoplay) {
+      isAutoplay = setInterval(() => {
+        if (x === width) {
+          y++;
+          x = 0;
+        }
+        dispatch(openCell(x, y));
+        x++;
+        if (y + 1 === height && x === width) {
+          dispatch(gameMode("win"));
+          dispatch(autoplaySettings());
+        }
+      }, 150);
+    }
+    return () => {
+      clearInterval(isAutoplay);
+    };
+  }, [autoplay, dispatch, height, width]);
 
   const getResultEmoji = useCallback((gameState) => {
     switch (gameState) {
@@ -63,6 +93,11 @@ const StatusContainer = () => {
     dispatch(showSettings());
   }, [dispatch]);
 
+  const onClickAutoplay = useCallback(() => {
+    dispatch(restartGame());
+    dispatch(autoplaySettings());
+  }, [dispatch]);
+
   return (
     <>
       {!enableSettings && (
@@ -74,6 +109,7 @@ const StatusContainer = () => {
           elapsedTime={elapsedTime.toString().padStart(3, "0")}
           onClickRestart={onClickRestart}
           onClickSettings={onClickSettings}
+          onClickAutoplay={onClickAutoplay}
         />
       )}
     </>

@@ -67,7 +67,6 @@ export const getFlagIncDec = (code: number) => {
 export const expandOpenedCell = (boardData: any, x: number, y: number) => {
   let openedCellCount = 0;
 
-  // Define function to get mine count
   const getMineCount = (x: number, y: number) => {
     let aroundCode: any = [];
     let mineCount = 0;

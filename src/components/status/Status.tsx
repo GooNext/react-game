@@ -7,6 +7,7 @@ import {
   RestartButton,
   SettingsButton,
   Timer,
+  AutoplayButton,
 } from "./StatusStyle";
 
 type StatusType = {
@@ -17,6 +18,7 @@ type StatusType = {
   elapsedTime: any;
   onClickRestart: any;
   onClickSettings: any;
+  onClickAutoplay: any;
 };
 
 const Status = ({
@@ -27,6 +29,7 @@ const Status = ({
   elapsedTime,
   onClickRestart,
   onClickSettings,
+  onClickAutoplay,
 }: StatusType) => {
   return (
     <Wrapper>
@@ -46,6 +49,7 @@ const Status = ({
           </SettingsButton>
         )}
       </ButtonWrapper>
+      <AutoplayButton onClick={onClickAutoplay}>Autoplay</AutoplayButton>
       <Timer>🕙 {elapsedTime}</Timer>
     </Wrapper>
   );

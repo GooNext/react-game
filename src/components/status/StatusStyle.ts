@@ -14,6 +14,10 @@ export const Mine = styled.div`
   align-items: center;
 `;
 
+export const AutoplayButton = styled.div`
+  cursor: pointer;
+`;
+
 export const ButtonWrapper = styled.div`
   flex: 1;
   text-align: center;

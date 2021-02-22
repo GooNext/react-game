@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  background-color: #3498db;
   border-radius: 5px;
   color: white;
   display: inline-block;

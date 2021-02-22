@@ -1,7 +1,9 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import produce from "immer";
 /* eslint-disable func-names */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
-import produce from "immer";
 import { MIN_WIDTH, MIN_HEIGHT, MIN_MINES, GAME, CODES } from "../../constants";
 import {
   initBoard,
@@ -17,9 +19,15 @@ const RESTART_GAME = "control/RESTART_GAME";
 const UPDATE_ELAPSED_TIME = "control/UPDATE_ELAPSED_TIME";
 const OPEN_CELL = "control/OPEN_CELL";
 const ROTATE_CELL_STATE = "control/ROTATE_CELL_STATE";
+const AUTOPLAY = "control/AUTOPLAY";
+const GAME_MODE = "control/GAME_MODE";
 
 export const showSettings = () => ({ type: SHOW_SETTINGS });
 export const hideSettings = () => ({ type: HIDE_SETTINGS });
+export const gameMode = (param: any) => ({ type: GAME_MODE, param });
+export const autoplaySettings = () => ({
+  type: AUTOPLAY,
+});
 export const setGame = (width: number, height: number, mineCount: number) => ({
   type: SET_GAME,
   width,
@@ -46,10 +54,20 @@ const initialState = {
   mineCount: MIN_MINES,
   flagCount: 0,
   openedCellCount: 0,
+  autoplay: false,
 };
 
 export default function (state = initialState, action: any) {
   switch (action.type) {
+    case GAME_MODE:
+      return produce(state, (draft: any) => {
+        draft.gameState = action.param;
+        if (action.param === "win") draft.enableTimer = false;
+      });
+    case AUTOPLAY:
+      return produce(state, (draft: any) => {
+        draft.autoplay = !draft.autoplay;
+      });
     case SHOW_SETTINGS:
       return produce(state, (draft: any) => {
         draft.enableSettings = true;
@@ -68,6 +86,7 @@ export default function (state = initialState, action: any) {
       return produce(state, (draft) => {
         draft.gameState = GAME.READY;
         draft.enableTimer = false;
+        draft.autoplay = false;
         draft.elapsedTime = 0;
         draft.boardData = initBoard(state.width, state.height, state.mineCount);
         draft.flagCount = 0;
@@ -81,33 +100,36 @@ export default function (state = initialState, action: any) {
       return produce(state, (draft) => {
         const code = state.boardData[action.y][action.x];
         draft.gameState = GAME.RUN;
+        if (code) {
+          if (!state.enableTimer) {
+            draft.enableTimer = true;
+          }
 
-        // Start timer if click on cell
-        if (!state.enableTimer) {
-          draft.enableTimer = true;
-        }
-
-        if (code === CODES.MINE) {
-          draft.gameState = GAME.LOSE;
-          draft.enableTimer = false;
-        } else if (code === CODES.NOTHING) {
-          const expandResult = expandOpenedCell(
-            draft.boardData,
-            action.x,
-            action.y
-          );
-          draft.boardData = expandResult.boardData;
-          draft.openedCellCount += expandResult.openedCellCount;
-
-          // Win
-          if (
-            state.width * state.height - state.mineCount ===
-            draft.openedCellCount
-          ) {
-            draft.gameState = GAME.WIN;
+          if (code === CODES.MINE && !draft.autoplay) {
+            draft.gameState = GAME.LOSE;
             draft.enableTimer = false;
+          } else if (code === CODES.NOTHING) {
+            const expandResult = expandOpenedCell(
+              draft.boardData,
+              action.x,
+              action.y
+            );
+            draft.boardData = expandResult.boardData;
+            draft.openedCellCount += expandResult.openedCellCount;
+
+            // Win
+            if (
+              state.width * state.height - state.mineCount ===
+                draft.openedCellCount &&
+              !draft.autoplay
+            ) {
+              draft.gameState = GAME.WIN;
+              draft.enableTimer = false;
+            }
           }
         }
+
+        // Start timer if click on cell
       });
     case ROTATE_CELL_STATE:
       return produce(state, (draft) => {

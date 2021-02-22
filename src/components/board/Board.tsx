@@ -3,11 +3,13 @@
 import React from "react";
 import { CELL_MARGIN, CELL_SIZE } from "../../constants";
 import { CellContainer } from "../../containers";
+import winGif from "../../assets/gif/iskra.gif";
 
 type BoardType = {
   width: string | number | any;
   height: string | number | any;
   onRightClickBoard: any;
+  gameState: string;
 };
 
 const divStyle = {
@@ -17,7 +19,7 @@ const divStyle = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Board = ({ width, height, onRightClickBoard }: BoardType) => {
+const Board = ({ width, height, onRightClickBoard, gameState }: BoardType) => {
   return (
     // @ts-ignore
     <div
@@ -27,11 +29,19 @@ const Board = ({ width, height, onRightClickBoard }: BoardType) => {
         width: `${width * (CELL_SIZE + CELL_MARGIN * 2)}px`,
       }}
     >
-      {Array(width * height)
-        .fill(" ")
-        .map((v, i) => (
-          <CellContainer key={v + i} x={i % width} y={Math.floor(i / width)} />
-        ))}
+      {gameState !== "win" ? (
+        Array(width * height)
+          .fill(" ")
+          .map((v, i) => (
+            <CellContainer
+              key={v + i}
+              x={i % width}
+              y={Math.floor(i / width)}
+            />
+          ))
+      ) : (
+        <img src={winGif} alt="wingif" />
+      )}
     </div>
   );
 };

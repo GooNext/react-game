@@ -29,7 +29,7 @@ const CellContainer = ({ x, y }: PropsType) => {
         case CODES.MINE_FLAG:
           switch (gameState) {
             case GAME.WIN:
-              return "💣";
+              return <img width="25px" src={bomb} alt="bomb" />;
             case GAME.LOSE:
               return <img width="25px" src={bomb} alt="bomb" />;
             default:
@@ -40,7 +40,7 @@ const CellContainer = ({ x, y }: PropsType) => {
         case CODES.MINE_QUESTION:
           switch (gameState) {
             case GAME.WIN:
-              return "💣";
+              return <img width="25px" src={bomb} alt="bomb" />;
             case GAME.LOSE:
               return <img width="25px" src={bomb} alt="bomb" />;
             default:
@@ -49,7 +49,7 @@ const CellContainer = ({ x, y }: PropsType) => {
         case CODES.MINE:
           switch (gameState) {
             case GAME.WIN:
-              return "💣";
+              return <img width="25px" src={bomb} alt="bomb" />;
             case GAME.LOSE:
               return <img width="25px" src={bomb} alt="bomb" />;
             default:

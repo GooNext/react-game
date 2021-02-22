@@ -21,6 +21,9 @@ export const Button = styled.button`
   border: none;
   border-radius: 5px;
   box-sizing: border-box;
+  border: 1px solid #fff;
+  box-shadow: 1px 1px 6px #0000001c;
+  cursor: pointer;
   color: ${({ cellCode }: any) => {
     switch (cellCode) {
       case 1:
