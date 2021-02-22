@@ -15,8 +15,9 @@ const App = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
+        height: window.innerWidth > 500 ? "100vh" : "auto",
         background: `url(${bg})`,
+        overflowX: "hidden",
       }}
     >
       <SettingsPanel />

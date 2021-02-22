@@ -26,7 +26,8 @@ const Board = ({ width, height, onRightClickBoard, gameState }: BoardType) => {
       style={{
         ...divStyle,
         flexWrap: "wrap",
-        width: `${width * (CELL_SIZE + CELL_MARGIN * 2)}px`,
+        maxWidth: `${width * (CELL_SIZE + CELL_MARGIN * 2)}px`,
+        width: "100%",
       }}
     >
       {gameState !== "win" ? (

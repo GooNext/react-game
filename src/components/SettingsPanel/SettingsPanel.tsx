@@ -14,7 +14,7 @@ const Volume = () => {
 
   const [state, setState] = useState({
     toggled: false,
-    volume: [0],
+    volume: [50],
   });
 
   useEffect(() => {
