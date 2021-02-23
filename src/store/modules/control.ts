@@ -37,6 +37,44 @@ export const setGame = (width: number, height: number, mineCount: number) => ({
 export const restartGame = () => ({ type: RESTART_GAME });
 export const updateElapsedTime = () => ({ type: UPDATE_ELAPSED_TIME });
 export const openCell = (x: number, y: number) => ({ type: OPEN_CELL, x, y });
+export const setLocalStorageInfo = (draft: any) => {
+  // @ts-ignore
+  const statsArr = JSON.parse(localStorage.getItem("stats"));
+  if (statsArr) {
+    localStorage.setItem(
+      "stats",
+      // @ts-ignore
+      JSON.stringify([
+        ...statsArr,
+        {
+          gameState: draft.gameState,
+          elapsedTime: draft.elapsedTime,
+          openedCellCount: draft.openedCellCount,
+          autoplay: draft.autoplay,
+          fieldWidth: draft.width,
+          fieldHeight: draft.height,
+          minesCount: draft.mineCount,
+        },
+      ])
+    );
+  } else {
+    localStorage.setItem(
+      "stats",
+      // @ts-ignore
+      JSON.stringify([
+        {
+          gameState: draft.gameState,
+          elapsedTime: draft.elapsedTime,
+          openedCellCount: draft.openedCellCount,
+          autoplay: draft.autoplay,
+          fieldWidth: draft.width,
+          fieldHeight: draft.height,
+          minesCount: draft.mineCount,
+        },
+      ])
+    );
+  }
+};
 export const rotateCellState = (x: number, y: number) => ({
   type: ROTATE_CELL_STATE,
   x,
@@ -63,6 +101,7 @@ export default function (state = initialState, action: any) {
       return produce(state, (draft: any) => {
         draft.gameState = action.param;
         if (action.param === "win") draft.enableTimer = false;
+        setLocalStorageInfo(draft);
       });
     case AUTOPLAY:
       return produce(state, (draft: any) => {
@@ -108,6 +147,7 @@ export default function (state = initialState, action: any) {
           if (code === CODES.MINE && !draft.autoplay) {
             draft.gameState = GAME.LOSE;
             draft.enableTimer = false;
+            setLocalStorageInfo(draft);
           } else if (code === CODES.NOTHING) {
             const expandResult = expandOpenedCell(
               draft.boardData,
@@ -125,6 +165,7 @@ export default function (state = initialState, action: any) {
             ) {
               draft.gameState = GAME.WIN;
               draft.enableTimer = false;
+              setLocalStorageInfo(draft);
             }
           }
         }

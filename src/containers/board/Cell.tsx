@@ -1,15 +1,18 @@
 import React, { memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useSound from "use-sound";
 import { GAME, CODES } from "../../constants";
 import { openCell, rotateCellState } from "../../store/modules/control";
 import { Cell } from "../../components";
 import bomb from "../../assets/img/bomb.png";
+import cellClick from "../../assets/sounds/cellclick.mp3";
 
 type PropsType = {
   x: string | any;
   y: string | any;
 };
 const CellContainer = ({ x, y }: PropsType) => {
+  const [play] = useSound(cellClick);
   const dispatch = useDispatch();
   const gameState = useSelector(
     (rootState: any) => rootState.control.gameState
@@ -66,7 +69,8 @@ const CellContainer = ({ x, y }: PropsType) => {
     if (gameState === GAME.READY || gameState === GAME.RUN) {
       dispatch(openCell(x, y));
     }
-  }, [gameState, dispatch, x, y]);
+    play();
+  }, [gameState, dispatch, x, y, play]);
 
   const onRightClickCell: any = useCallback(
     (e: any) => {

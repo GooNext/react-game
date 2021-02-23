@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./settingsPanel.scss";
 import { Range, getTrackBackground } from "react-range";
+import { Link, withRouter } from "react-router-dom";
 import phoneSound from "../../assets/sounds/phonemusic.mp3";
 import volume from "../../assets/svg/volume.svg";
 
@@ -103,12 +104,17 @@ const Volume = () => {
   );
 };
 
-const SettingsPanel = () => {
+const SettingsPanel = ({ location }: any) => {
+  const locationName =
+    location.pathname === "/statistic" ? "Main page" : "Statistic";
+  const locationLink = location.pathname === "/statistic" ? "/" : "statistic";
+
   return (
     <div className="settings__panel">
       <Volume />
+      <Link to={locationLink}>{locationName}</Link>
     </div>
   );
 };
 
-export default SettingsPanel;
+export default withRouter(SettingsPanel);
