@@ -21,6 +21,7 @@ const Volume = () => {
   useEffect(() => {
     const e = state.volume[0];
     phoneMusic.current.volume = e * 0.01;
+    document.addEventListener("click", () => phoneMusic.current?.play());
   }, [state.volume]);
 
   const RenderRange = () => (
@@ -99,7 +100,7 @@ const Volume = () => {
       ) : (
         <img width="30px" src={volume} alt="volume-icon" />
       )}
-      <audio loop autoPlay ref={phoneMusic} src={phoneSound} />
+      <audio loop ref={phoneMusic} src={phoneSound} />
     </div>
   );
 };
