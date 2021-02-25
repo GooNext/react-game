@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHotkeys } from "react-hotkeys-hook";
 import { GAME } from "../../constants";
 import {
   showSettings,
@@ -97,6 +98,22 @@ const StatusContainer = () => {
     dispatch(restartGame());
     dispatch(autoplaySettings());
   }, [dispatch]);
+
+  const toggleWin = useCallback(() => {
+    dispatch(gameMode("win"));
+  }, [dispatch]);
+
+  const hotkeys = {
+    autoplay: () => onClickAutoplay(),
+    restart: () => onClickRestart(),
+    settings: () => onClickSettings(),
+    autoWin: () => toggleWin(),
+  };
+
+  useHotkeys("a", hotkeys.autoplay);
+  useHotkeys("r", hotkeys.restart);
+  useHotkeys("s", hotkeys.settings);
+  useHotkeys("w", hotkeys.autoWin);
 
   return (
     <>

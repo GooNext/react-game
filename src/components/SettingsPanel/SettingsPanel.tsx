@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import "./settingsPanel.scss";
 import { Range, getTrackBackground } from "react-range";
 import { Link, withRouter } from "react-router-dom";
+import { useHotkeys } from "react-hotkeys-hook";
 import phoneSound from "../../assets/sounds/phonemusic.mp3";
 import volume from "../../assets/svg/volume.svg";
 
@@ -17,6 +18,8 @@ const Volume = () => {
     toggled: false,
     volume: [50],
   });
+
+  useHotkeys("m", () => setState({ ...state, volume: [0] }));
 
   useEffect(() => {
     const e = state.volume[0];
