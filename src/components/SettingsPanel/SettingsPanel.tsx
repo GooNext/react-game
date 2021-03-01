@@ -4,8 +4,8 @@ import "./settingsPanel.scss";
 import { Range, getTrackBackground } from "react-range";
 import { Link, withRouter } from "react-router-dom";
 import { useHotkeys } from "react-hotkeys-hook";
+import { Volume2 as Sound, PieChart, Maximize } from "react-feather";
 import phoneSound from "../../assets/sounds/phonemusic.mp3";
-import volume from "../../assets/svg/volume.svg";
 
 const STEP = 0.1;
 const MIN = 0;
@@ -28,7 +28,7 @@ const Volume = () => {
   }, [state.volume]);
 
   const RenderRange = () => (
-    <div>
+    <div className="volume">
       <Range
         values={state.volume}
         step={STEP}
@@ -96,13 +96,8 @@ const Volume = () => {
     <div
       onMouseEnter={() => setState({ ...state, toggled: true })}
       onMouseLeave={() => setState({ ...state, toggled: false })}
-      className="volume"
     >
-      {state.toggled ? (
-        RenderRange()
-      ) : (
-        <img width="30px" src={volume} alt="volume-icon" />
-      )}
+      {state.toggled ? RenderRange() : <Sound color="#4169E1" />}
       <audio loop ref={phoneMusic} src={phoneSound} />
     </div>
   );
@@ -110,13 +105,27 @@ const Volume = () => {
 
 const SettingsPanel = ({ location }: any) => {
   const locationName =
-    location.pathname === "/statistic" ? "Main page" : "Statistic";
+    location.pathname === "/statistic" ? (
+      "Main page"
+    ) : (
+      <PieChart color="#4169E1" />
+    );
   const locationLink = location.pathname === "/statistic" ? "/" : "statistic";
 
   return (
     <div className="settings__panel">
-      <Volume />
-      <Link to={locationLink}>{locationName}</Link>
+      <div className="settings__panel-item">
+        <Volume />
+      </div>
+      <div className="settings__panel-item">
+        <Link to={locationLink}>{locationName}</Link>
+      </div>
+      <div
+        className="settings__panel-item"
+        onClick={() => document.documentElement.requestFullscreen()}
+      >
+        <Maximize color="#4169E1" />
+      </div>
     </div>
   );
 };
