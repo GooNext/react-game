@@ -1,13 +1,24 @@
+import { useEffect, useState } from "react";
+import Loader from "react-loader-web";
 import "./statistic.scss";
 
 const Statistic = () => {
-  const localStorageData = localStorage.getItem("stats");
-  const data = localStorageData ? JSON.parse(localStorageData) : [];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://goonextminespeeper.herokuapp.com/statistic")
+      .then((req: any) => req.json())
+      .then((res) => {
+        setTimeout(() => {
+          setData(res);
+        }, 1500);
+      });
+  }, []);
 
   type ItemType = {
     gameState: string;
-    elapsedTime: number;
-    openedCellCount: number;
+    ellapsedTime: number;
+    cells: number;
     autoplay: boolean;
     fieldWidth: number;
     fieldHeight: number;
@@ -35,8 +46,8 @@ const Statistic = () => {
                 // eslint-disable-next-line react/no-array-index-key
                 <tr key={`${JSON.stringify(item)} ${index}`}>
                   <td>{item.gameState}</td>
-                  <td>{item.elapsedTime} sec</td>
-                  <td>{item.openedCellCount}</td>
+                  <td>{item.ellapsedTime} sec</td>
+                  <td>{item.cells}</td>
                   <td>{item.autoplay ? "true" : "false"}</td>
                   <td>{item.fieldWidth}</td>
                   <td>{item.fieldHeight}</td>
@@ -47,7 +58,7 @@ const Statistic = () => {
           </tbody>
         </table>
       ) : (
-        <h1>Empty</h1>
+        <Loader type="Loading" color="#fff" height={200} width={200} />
       )}
     </div>
   );

@@ -38,42 +38,21 @@ export const restartGame = () => ({ type: RESTART_GAME });
 export const updateElapsedTime = () => ({ type: UPDATE_ELAPSED_TIME });
 export const openCell = (x: number, y: number) => ({ type: OPEN_CELL, x, y });
 export const setLocalStorageInfo = (draft: any) => {
-  // @ts-ignore
-  const statsArr = JSON.parse(localStorage.getItem("stats"));
-  if (statsArr) {
-    localStorage.setItem(
-      "stats",
-      // @ts-ignore
-      JSON.stringify([
-        ...statsArr,
-        {
-          gameState: draft.gameState,
-          elapsedTime: draft.elapsedTime,
-          openedCellCount: draft.openedCellCount,
-          autoplay: draft.autoplay,
-          fieldWidth: draft.width,
-          fieldHeight: draft.height,
-          minesCount: draft.mineCount,
-        },
-      ])
-    );
-  } else {
-    localStorage.setItem(
-      "stats",
-      // @ts-ignore
-      JSON.stringify([
-        {
-          gameState: draft.gameState,
-          elapsedTime: draft.elapsedTime,
-          openedCellCount: draft.openedCellCount,
-          autoplay: draft.autoplay,
-          fieldWidth: draft.width,
-          fieldHeight: draft.height,
-          minesCount: draft.mineCount,
-        },
-      ])
-    );
-  }
+  fetch("https://goonextminespeeper.herokuapp.com/statistic", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      gameState: draft.gameState,
+      ellapsedTime: draft.elapsedTime,
+      cells: draft.openedCellCount,
+      autoplay: draft.autoplay,
+      fieldWidth: draft.width,
+      fieldHeight: draft.height,
+      minesCount: draft.mineCount,
+    }),
+  });
 };
 export const rotateCellState = (x: number, y: number) => ({
   type: ROTATE_CELL_STATE,
