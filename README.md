@@ -2,7 +2,7 @@
 
 ### Демо - https://goonext-react-game.netlify.app/
 
-### Видео - https://goonext-react-game.netlify.app/
+### Видео - https://youtu.be/8HaD-jNHBE8
 
 ### Хоткеи
   - R: restart game
